@@ -1,0 +1,291 @@
+🔹 JavaScript (Most Important Round)
+This is where most candidates struggle.
+
+1. What is closure? Where have you used it?
+2. Explain event loop with execution order
+3. Implement debounce/throttle in JavaScript
+4. How does "this" behave in different contexts?
+5. Promise chaining vs async/await
+
+🔹 Round 2: React Deep Dive
+
+1. Why do components re-render?
+2. useMemo vs useCallback vs React.memo
+3. How does useEffect lifecycle work?
+4. How do you prevent unnecessary renders?
+5. Real-world state management approach
+
+🔹 Round 3: Machine Coding
+
+1. Build a debounced search / autocomplete
+2. Handle API calls with proper states
+3. Focus on clean architecture & reusability
+4. Edge cases + performance considerations
+
+🔹 Round 4: Frontend System Design
+
+1. Design a scalable UI (dashboard/feed)
+2. Folder structure & code organization
+3. API handling and caching
+4. Performance optimization techniques
+
+🔹 Round 5: Hiring Manager Round
+
+1. Deep dive into your project
+2. Why did you choose certain approaches
+3. Challenges and trade-offs
+4. Ownership and decision making
+
+
+
+
+
+ANSWERS
+
+🔹 JavaScript (Most Important Round)
+1. What is Closure?
+
+Answer (interview-ready):
+A closure is when a function remembers variables from its lexical scope even after the outer function has finished execution.
+
+Example:
+
+function outer() {
+  let count = 0;
+  return function inner() {
+    count++;
+    return count;
+  };
+}
+
+const fn = outer();
+console.log(fn()); // 1
+console.log(fn()); // 2
+
+Where used:
+
+Data hiding (private variables)
+Currying
+Debounce/throttle
+React hooks internally
+2. Event Loop + Execution Order
+
+Answer:
+JavaScript is single-threaded, but handles async tasks using:
+
+Call Stack
+Web APIs
+Callback Queue / Microtask Queue
+
+Execution Priority:
+
+Call Stack (sync code)
+Microtasks (Promises, MutationObserver)
+Macrotasks (setTimeout, setInterval)
+
+Example:
+
+console.log("Start");
+
+setTimeout(() => console.log("Timeout"), 0);
+
+Promise.resolve().then(() => console.log("Promise"));
+
+console.log("End");
+
+Output:
+
+Start
+End
+Promise
+Timeout
+3. Debounce vs Throttle
+Debounce
+
+Executes after delay (last call only)
+
+function debounce(fn, delay) {
+  let timer;
+  return function (...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn.apply(this, args), delay);
+  };
+}
+Throttle
+
+Executes at fixed intervals
+
+function throttle(fn, limit) {
+  let flag = true;
+  return function (...args) {
+    if (!flag) return;
+    fn.apply(this, args);
+    flag = false;
+    setTimeout(() => flag = true, limit);
+  };
+}
+4. How "this" Works
+Context	Value of this
+Global	window (browser)
+Function	window / undefined (strict mode)
+Object method	object itself
+Arrow function	inherits from parent
+Constructor	new object
+
+Example:
+
+const obj = {
+  name: "Vedant",
+  normal: function() { console.log(this.name); },
+  arrow: () => console.log(this.name)
+};
+
+obj.normal(); // Vedant
+obj.arrow();  // undefined
+5. Promise vs Async/Await
+Feature	Promise	Async/Await
+Syntax	.then()	cleaner
+Readability	harder	easier
+Error Handling	.catch()	try/catch
+
+Example:
+
+async function fetchData() {
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.error(err);
+  }
+}
+🔹 React Deep Dive
+1. Why Components Re-render?
+State change
+Props change
+Parent re-render
+Context change
+2. useMemo vs useCallback vs React.memo
+Tool	Purpose
+useMemo	Memoize value
+useCallback	Memoize function
+React.memo	Prevent component re-render
+
+Example:
+
+const memoizedValue = useMemo(() => compute(), [dep]);
+const memoizedFn = useCallback(() => {}, [dep]);
+
+export default React.memo(Component);
+3. useEffect Lifecycle
+
+Runs after render.
+
+useEffect(() => {
+  // mount + update
+  return () => {
+    // cleanup (unmount)
+  };
+}, [dependencies]);
+
+Cases:
+
+[] → runs once
+[dep] → runs when dep changes
+no deps → runs every render
+4. Prevent Unnecessary Re-renders
+React.memo
+useMemo / useCallback
+Avoid inline functions
+Proper key usage
+State lifting carefully
+5. Real-world State Management
+Small app → useState + props
+Medium → Context API
+Large → Redux / Zustand
+🔹 Machine Coding Round
+1. Debounced Search (Important)
+const handleSearch = debounce(async (query) => {
+  const res = await fetch(`/api?q=${query}`);
+  const data = await res.json();
+  setResults(data);
+}, 500);
+2. API Handling States
+const [loading, setLoading] = useState(false);
+const [error, setError] = useState(null);
+
+async function fetchData() {
+  try {
+    setLoading(true);
+    const res = await fetch(url);
+    const data = await res.json();
+  } catch (err) {
+    setError(err);
+  } finally {
+    setLoading(false);
+  }
+}
+3. Clean Architecture (Say this!)
+Separate:
+UI (components)
+Logic (hooks/services)
+API layer
+Reusable hooks
+4. Edge Cases
+Empty input
+API failure
+Slow network
+Race conditions (use AbortController)
+🔹 Frontend System Design
+1. Scalable UI
+Component-based architecture
+Lazy loading
+Pagination / infinite scroll
+2. Folder Structure
+src/
+ ├── components/
+ ├── pages/
+ ├── hooks/
+ ├── services/
+ ├── utils/
+ ├── store/
+3. API Handling + Caching
+React Query / SWR
+Cache responses
+Retry logic
+4. Performance Optimization
+Code splitting
+Lazy loading
+Memoization
+Virtualization (large lists)
+🔹 Hiring Manager Round
+How to Answer Smartly
+1. Project Explanation
+
+Use:
+
+Problem → Approach → Tech → Result
+
+2. Why choices?
+
+Example:
+
+I used React Query for caching and reducing API calls.
+
+3. Challenges
+API delays
+State complexity
+Performance issues
+4. Ownership
+
+Say:
+
+I handled design decisions, debugging, and performance improvements.
+
+🚀 Final Tip (Very Important)
+
+Most candidates know answers, but fail because:
+
+No real examples
+No structured explanation
+No confidence
